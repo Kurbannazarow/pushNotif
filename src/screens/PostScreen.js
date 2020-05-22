@@ -1,6 +1,4 @@
 import React from "react";
-import { Notifications } from "expo";
-import * as Permissions from "expo-permissions";
 import {
   View,
   Text,
@@ -10,38 +8,18 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+import { Notifications } from 'expo';
+import moment from 'moment';
 import { DATA } from "../data";
 
-export const PostScreen = async ({ navigation }) => {
+export const PostScreen = ({ navigation }) => {
   const post = navigation.getParam("post");
 
-  const registerNotification = () => {
-    const localNotification = {
-      title: "",
-      body: "",
-    };
-
-    let t = new Date();
-    t.setSeconds(t.getSeconds() + 10);
-    const schedulingOptions = {
-      time: t,
-    };
-
-    Notifications.scheduleLocalNotificationAsync(
-      localNotification,
-      schedulingOptions
-    );
-  };
-
-  let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-
-  if (Constants.isDevice && result.status === "granted") {
-    console.log("Notification permissions granted.");
-  }
-
-  Notifications.addListener(this._handleNotification);
-
   const postData = DATA.filter((p) => p.id === post.id)[0];
+
+  let expoToken = ""
 
   const notificationHandler = () => {
     Alert.alert(
@@ -56,13 +34,68 @@ export const PostScreen = async ({ navigation }) => {
           text: "Подключить",
           style: "destructive",
           onPress: () => {
-            registerNotification();
+            console.log(postData.lessons)
+            registerForPushNotificationsAsync();
           },
         },
       ],
       { cancelable: false }
     );
   };
+  const registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        console.log('Failed to get push token for push notification!');
+        return;
+      }
+      let token = await Notifications.getExpoPushTokenAsync();
+      console.log(token);
+      expoToken = token
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('default', {
+        name: 'default',
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+    getLessons()
+    
+  };
+  const getLessons = async () => {
+    let lessons = postData.lessons
+    for (let i = 0; i < lessons.length; i++) {
+      await scheduleNotification(lessons[i].name, lessons[i].date)
+    }
+  }
+  const scheduleNotification = async (name, date) => {
+    const localNotification = {
+      title: name,
+      body: date,
+      data: { type: 'delayed' },
+      sound: true
+    }
+    const schedulingOptions = {
+      time: (new Date(date).getTime())
+    }
+    let currentDate = new Date(date).getTime()
+    console.log(currentDate)
+    // console.log('Scheduling delayed notification:', { localNotification, schedulingOptions })
+
+    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions)
+      .then(id => console.info(`Delayed notification scheduled (${id}) at ${moment(schedulingOptions.time).format()}`))
+      .catch(err => console.error(err))
+  }
 
   return (
     <ScrollView style={styles.center}>
