@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {
   View,
   Text,
@@ -6,24 +6,20 @@ import {
   Button,
   Image,
   ScrollView,
-  Alert,
+  Alert, Linking
 } from "react-native";
-import * as Permissions from 'expo-permissions';
-import Constants from 'expo-constants';
-import { Notifications } from 'expo';
-import moment from 'moment';
+import * as Permissions from "expo-permissions";
+import Constants from "expo-constants";
+import { Notifications } from "expo";
+import moment from "moment";
 import { DATA } from "../data";
 
 export const PostScreen = ({ navigation }) => {
   const post = navigation.getParam("post");
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 752b6d3f1917fc3ad16c0ef82bf508a81de893b4
   const postData = DATA.filter((p) => p.id === post.id)[0];
 
-  let expoToken = ""
+  let expoToken = "";
 
   const notificationHandler = () => {
     Alert.alert(
@@ -31,14 +27,13 @@ export const PostScreen = ({ navigation }) => {
       "Вы хотите подключить оповещение об экзамене?",
       [
         {
-          text: postData.skill,
+          text: 'Не надо',
           style: "cancel",
         },
         {
           text: "Подключить",
           style: "destructive",
           onPress: () => {
-            console.log(postData.lessons)
             registerForPushNotificationsAsync();
           },
         },
@@ -46,60 +41,82 @@ export const PostScreen = ({ navigation }) => {
       { cancelable: false }
     );
   };
+
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
       let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
         finalStatus = status;
       }
-      if (finalStatus !== 'granted') {
-        console.log('Failed to get push token for push notification!');
+      if (finalStatus !== "granted") {
+        console.log("Failed to get push token for push notification!");
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
       console.log(token);
-      expoToken = token
+      expoToken = token;
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert("Must use physical device for Push Notifications");
     }
 
-    if (Platform.OS === 'android') {
-      Notifications.createChannelAndroidAsync('default', {
-        name: 'default',
+    if (Platform.OS === "android") {
+      Notifications.createChannelAndroidAsync("default", {
+        name: "default",
         sound: true,
-        priority: 'max',
+        priority: "max",
         vibrate: [0, 250, 250, 250],
       });
     }
-    getLessons()
-    
+    getLessons();
   };
   const getLessons = async () => {
-    let lessons = postData.lessons
+    let lessons = postData.lessons;
     for (let i = 0; i < lessons.length; i++) {
-      await scheduleNotification(lessons[i].name, lessons[i].date)
+      await scheduleNotification(lessons[i].name, lessons[i].date);
     }
-  }
+  };
   const scheduleNotification = async (name, date) => {
     const localNotification = {
       title: name,
       body: date,
-      data: { type: 'delayed' },
-      sound: true
-    }
+      data: { type: "delayed" },
+      sound: true,
+    };
     const schedulingOptions = {
-      time: (new Date(date).getTime())
-    }
-    let currentDate = new Date(date).getTime()
-    console.log(currentDate)
+      time: new Date(date).getTime(),
+    };
+    let currentDate = new Date(date).getTime();
+    console.log(currentDate);
     // console.log('Scheduling delayed notification:', { localNotification, schedulingOptions })
 
-    Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions)
-      .then(id => console.info(`Delayed notification scheduled (${id}) at ${moment(schedulingOptions.time).format()}`))
-      .catch(err => console.error(err))
-  }
+    Notifications.scheduleLocalNotificationAsync(
+      localNotification,
+      schedulingOptions
+    )
+      .then((id) =>
+        console.info(
+          `Delayed notification scheduled (${id}) at ${moment(
+            schedulingOptions.time
+          ).format()}`
+        )
+      )
+      .catch((err) => console.error(err));
+  };
+  const url = 'https://old.mospolytech.ru/index.php?id=6453#2.2.7';
+
+  const OpenSettingsButton = ({ children }) => {
+    const handlePress = useCallback(async () => {
+      await Linking.openURL(url);
+    }, []);
+  
+    return <Button title={children} onPress={handlePress} />;
+  };
 
   return (
     <ScrollView style={styles.center}>
@@ -137,6 +154,13 @@ export const PostScreen = ({ navigation }) => {
         <Text style={styles.tit}>{postData.lessons[1].name}</Text>
         <Text style={styles.tit}>{postData.lessons[2].name}</Text>
       </View>
+      <View style={styles.btn}>
+      <Button
+        title="Включить уведомление"
+        color="green"
+        onPress={notificationHandler}
+      />
+      </View>
 
       <View style={styles.textWrapper}>
         <Text style={styles.subTitle}>БЮДЖЕТНЫХ МЕСТ</Text>
@@ -160,11 +184,37 @@ export const PostScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <Button        style={styles.btn}
+      <View style={styles.textWrapper}>
+        <Text style={styles.subTitle}>РУКОВОДИТЕЛЬ</Text>
+        <Text style={styles.title}>
+          {postData.teacher}
+        </Text>
+      </View>
+
+      <View style={styles.btn}>
+      <Button
         title="Включить уведомление"
         color="green"
         onPress={notificationHandler}
       />
+      </View>
+
+      <View style={styles.textWrapper}>
+        <Text style={styles.subTitle}>ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</Text>
+        <Text style={styles.title}>
+          {postData.information}
+        </Text>
+        <OpenSettingsButton>см. пункт 2.2.7</OpenSettingsButton>
+      </View>
+      
+      <View style={styles.textWrapper}>
+        <Text style={styles.subTitle}>Обучение в Мосполитехе</Text>
+        <Text style={styles.title}>
+          {postData.study}
+        </Text>
+        <OpenSettingsButton>перейти</OpenSettingsButton>
+      </View>
+      
     </ScrollView>
   );
 };
@@ -173,8 +223,10 @@ PostScreen.navigationOptions = ({ navigation }) => {
   const post = navigation.getParam("post");
   return {
     headerTitle: post.name,
+    
     headerStyle: {
       backgroundColor: "green",
+      
     },
   };
 };
@@ -203,15 +255,15 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     marginTop: 15,
-    shadowColor: "black",
-    shadowOffset: {
-      width: 10,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
+    // shadowColor: "black",
+    // shadowOffset: {
+    //   width: 10,
+    //   height: 5,
+    // },
+    // shadowOpacity: 0.36,
+    // shadowRadius: 6.68,
 
-    elevation: 5,
+    // elevation: 5,
   },
   title: {
     padding: 10,
@@ -224,5 +276,6 @@ const styles = StyleSheet.create({
   },
   btn: {
     padding: 1,
+    marginBottom: 30
   },
 });

@@ -5,7 +5,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { MainScreen } from "../screens/MainScreen";
 import { PostScreen } from "../screens/PostScreen";
 import { AboutScreen } from "../screens/AboutScreen";
-import { BlurView } from "expo-blur";
+// import { BlurView } from "expo-blur";
 import { THEME } from "../theme";
 const PostNavigator = createStackNavigator(
   {
@@ -15,7 +15,7 @@ const PostNavigator = createStackNavigator(
       screen: PostScreen,
       navigationOptions: {
         headerTitleAlign: "center",
-        
+        headerTintColor: '#fff',
       },
     },
   },
