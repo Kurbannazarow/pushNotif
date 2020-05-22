@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     title: {
-        color: '#fff'
+        color: '#fff',
+        textAlign: 'center'
     }
 });

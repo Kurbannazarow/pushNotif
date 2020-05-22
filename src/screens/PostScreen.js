@@ -35,6 +35,7 @@ export const PostScreen = ({ navigation }) => {
           style: "destructive",
           onPress: () => {
             registerForPushNotificationsAsync();
+            alert("Уведомление настроено");
           },
         },
       ],
@@ -128,6 +129,11 @@ export const PostScreen = ({ navigation }) => {
       <View>
         <Text style={styles.tac}>Информация об образовательной программе</Text>
       </View>
+      
+      <View style={styles.textWrap}>
+        <Text style={styles.subTitle}>КВАЛИФИКАЦИЯ</Text>
+        <Text style={styles.title}>{postData.skill}</Text>
+      </View>
 
       <View style={styles.textWrap}>
         <Text style={styles.subTitle}>НАИМЕНОВАНИЕ НАПРАВЛЕНИЯ</Text>
@@ -153,10 +159,20 @@ export const PostScreen = ({ navigation }) => {
         <Text style={styles.subTitle}>
           ВСТУПИТЕЛЬНЫЕ ИСПЫТАНИЯ И МИНИМАЛЬНЫЕ БАЛЛЫ
         </Text>
-        <Text style={styles.tit}>{postData.lessons[0].name}</Text>
-        <Text style={styles.tit}>{postData.lessons[1].name}</Text>
+        <View style={styles.date}>
+          <Text style={styles.tit}>{postData.lessons[0].name}</Text>
+          <Text style={styles.tite}>{new Date(postData.lessons[0].date).toLocaleString()}</Text>
+        </View>
+        <View style={styles.date}>
+          <Text style={styles.tit}>{postData.lessons[1].name}</Text>
+          <Text style={styles.tite}>{new Date(postData.lessons[1].date).toLocaleString()}</Text>
+        </View>
+        <View style={styles.date}>
         <Text style={styles.tit}>{postData.lessons[2].name}</Text>
+          <Text style={styles.tite}>{new Date(postData.lessons[2].date).toLocaleString()}</Text>
+        </View>
       </View>
+
       <View style={styles.btn}>
       <Button
         title="Включить уведомление"
@@ -181,25 +197,27 @@ export const PostScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.textWrapper}>
+        <Text style={styles.subTitle}>РУКОВОДИТЕЛЬ</Text>
+        <Text style={styles.title}>
+          {postData.teacher}
+        </Text>
+      </View>
+
+      <View style={styles.textWrapper}>
         <Text style={styles.subTitle}>ПРИЕМ ИНОСТРАННЫХ ГРАЖДАН</Text>
         <Text style={styles.title}>
           {postData.foreign ? "Возможен" : "Не возможен"}
         </Text>
       </View>
 
-      <View style={styles.textWrapper}>
-        <Text style={styles.subTitle}>РУКОВОДИТЕЛЬ</Text>
-        <Text style={styles.title}>
-          {postData.teacher}
-        </Text>
-      </View>
       <View style={styles.btn}>
       <Button
-        title="Включит"
+        title="Включить уведомление"
         color="green"
         onPress={notificationHandler}
       />
       </View>
+
       <View style={styles.textWrapper}>
         <Text style={styles.subTitle}>ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</Text>
         <Text style={styles.title}>
@@ -272,10 +290,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   tit: {
-    padding: 10,
+    paddingTop: 15,
     textAlign: "center",
   },
+  tite: {
+    paddingTop: 5,
+    textAlign: "center",
+    color: 'green'
+  },
   btn: {
+    padding: 1,
+    marginBottom: 30
+  },
+  date: {
     padding: 1,
     marginBottom: 30
   },
