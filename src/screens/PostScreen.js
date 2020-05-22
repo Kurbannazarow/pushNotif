@@ -12,34 +12,9 @@ import {
 } from "react-native";
 import { DATA } from "../data";
 
-export const PostScreen = async ({ navigation }) => {
+export const PostScreen = ({ navigation }) => {
   const post = navigation.getParam("post");
 
-  const registerNotification = () => {
-    const localNotification = {
-      title: "",
-      body: "",
-    };
-
-    let t = new Date();
-    t.setSeconds(t.getSeconds() + 10);
-    const schedulingOptions = {
-      time: t,
-    };
-
-    Notifications.scheduleLocalNotificationAsync(
-      localNotification,
-      schedulingOptions
-    );
-  };
-
-  let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-
-  if (Constants.isDevice && result.status === "granted") {
-    console.log("Notification permissions granted.");
-  }
-
-  Notifications.addListener(this._handleNotification);
 
   const postData = DATA.filter((p) => p.id === post.id)[0];
 
@@ -56,7 +31,7 @@ export const PostScreen = async ({ navigation }) => {
           text: "Подключить",
           style: "destructive",
           onPress: () => {
-            registerNotification();
+            // registerNotification();
           },
         },
       ],
@@ -123,8 +98,7 @@ export const PostScreen = async ({ navigation }) => {
         </Text>
       </View>
 
-      <Button
-        style={styles.btn}
+      <Button        style={styles.btn}
         title="Включить уведомление"
         color="green"
         onPress={notificationHandler}
