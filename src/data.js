@@ -15,16 +15,16 @@ export const DATA = [{
         "teacher": "",
         "lessons": [{
                 "name": "Информатика и ИКТ — 46",
-                "date": "Friday, May 22, 2020 04:25:00 PM",
+                "date": "Sunday, May 24, 2020 02:00:00 AM",
                 // "hoursBefore": 4
             },
             {
                 "name": "Математика/WS* — 39",
-                "date": "Friday, May 22, 2020 04:26:00 PM",
+                "date": "Saturday, May 23, 2020 10:21:00 PM",
             },
             {
                 "name": "Русский язык — 46",
-                "date": "Friday, May 22, 2020 04:27:00 PM",
+                "date": "Sunday, May 24, 2020 08:00:00 AM",
             },
         ]
     },

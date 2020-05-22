@@ -76,22 +76,25 @@ export const PostScreen = ({ navigation }) => {
     getLessons();
   };
   const getLessons = async () => {
+    Notifications.cancelAllScheduledNotificationsAsync();
     let lessons = postData.lessons;
     for (let i = 0; i < lessons.length; i++) {
-      await scheduleNotification(lessons[i].name, lessons[i].date);
+      await scheduleNotification(lessons[i].name, lessons[i].date, 3);
+      await scheduleNotification(lessons[i].name, lessons[i].date, 24);
     }
   };
-  const scheduleNotification = async (name, date) => {
+  const scheduleNotification = async (name, date, hourBefore) => {
+    //Before 3 hours
     const localNotification = {
-      title: name,
+      title: "In " + hourBefore +  " hours - " + name,
       body: date,
       data: { type: "delayed" },
       sound: true,
     };
     const schedulingOptions = {
-      time: new Date(date).getTime(),
+      time: new Date(date).getTime() - (hourBefore*60*60*1000)
     };
-    let currentDate = new Date(date).getTime();
+    let currentDate = new Date(date).getTime() - (hourBefore*60*60*1000);
     console.log(currentDate);
     // console.log('Scheduling delayed notification:', { localNotification, schedulingOptions })
 
@@ -101,7 +104,7 @@ export const PostScreen = ({ navigation }) => {
     )
       .then((id) =>
         console.info(
-          `Delayed notification scheduled (${id}) at ${moment(
+          `Delayed notification scheduled(3hoursBefore) (${id}) at ${moment(
             schedulingOptions.time
           ).format()}`
         )
@@ -190,15 +193,13 @@ export const PostScreen = ({ navigation }) => {
           {postData.teacher}
         </Text>
       </View>
-
       <View style={styles.btn}>
       <Button
-        title="Включить уведомление"
+        title="Включит"
         color="green"
         onPress={notificationHandler}
       />
       </View>
-
       <View style={styles.textWrapper}>
         <Text style={styles.subTitle}>ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</Text>
         <Text style={styles.title}>
