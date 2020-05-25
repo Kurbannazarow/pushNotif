@@ -112,15 +112,7 @@ export const PostScreen = ({ navigation }) => {
       )
       .catch((err) => console.error(err));
   };
-  const url = 'https://old.mospolytech.ru/index.php?id=6453#2.2.7';
-
-  const OpenSettingsButton = ({ children }) => {
-    const handlePress = useCallback(async () => {
-      await Linking.openURL(url);
-    }, []);
   
-    return <Button title={children} onPress={handlePress} />;
-  };
 
   return (
     <ScrollView style={styles.center}>
@@ -216,22 +208,6 @@ export const PostScreen = ({ navigation }) => {
         color="green"
         onPress={notificationHandler}
       />
-      </View>
-
-      <View style={styles.textWrapper}>
-        <Text style={styles.subTitle}>ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</Text>
-        <Text style={styles.title}>
-          {postData.information}
-        </Text>
-        <OpenSettingsButton>см. пункт 2.2.7</OpenSettingsButton>
-      </View>
-      
-      <View style={styles.textWrapper}>
-        <Text style={styles.subTitle}>Обучение в Мосполитехе</Text>
-        <Text style={styles.title}>
-          {postData.study}
-        </Text>
-        <OpenSettingsButton>перейти</OpenSettingsButton>
       </View>
       
     </ScrollView>

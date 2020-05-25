@@ -1,26 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import {DATA} from '../data';
-import {Post} from '../components/Post';
 import {AppHeaderIcon, AppHeaderIcon2} from '../components/AppHeaderIcon';
+import { PostList } from '../components/PostList';
 
 
 export const MainScreen = ({navigation}) => {
-
-    const openPostHandler = items => {
-        navigation.navigate('Post', {post: items});
-    }
-
-    return (
-        <View style={styles.wrapper}>
-            <FlatList 
-             data={DATA} 
-             keyExtractor={item => item.id}
-             renderItem={({item}) =>  <Post items={item} onOpen={openPostHandler}/>}
-            />
-        </View>
-    );
+  const openPostHandler = items => {
+    navigation.navigate('Post', {post: items});
+  }
+  return <PostList data={DATA} onOpen={openPostHandler}/>;
 }
 
 const congurate = () => Alert.alert(
@@ -43,7 +33,7 @@ const congurate = () => Alert.alert(
   );
 
 
-MainScreen.navigationOptions = {
+MainScreen.navigationOptions = ({navigation}) => ({
     headerTitle: 'Все направлений',
     headerRight: () => <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
         <Item 
@@ -56,13 +46,8 @@ MainScreen.navigationOptions = {
     <Item 
      title="Take photo"
      iconName="hamburger" 
-     onPress={()=>congurate()}
+     onPress={()=>navigation.toggleDrawer()}
      />
 </HeaderButtons>
-};
-
-const styles = StyleSheet.create({
-    wrapper: {
-        padding: 10,
-    }
 });
+

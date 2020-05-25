@@ -3,7 +3,8 @@ import {StyleSheet, View, Text, ImageBackground, TouchableOpacity} from 'react-n
 
 export const Post = ({items, onOpen}) => {
     return (
-        <TouchableOpacity onLongPress={()=>alert('Не надо удерживать картинку чувак!')} onPress={()=>onOpen(items)} >
+        <TouchableOpacity onLongPress={()=>alert('Не надо удерживать картинку студент!')} 
+        onPress={()=>onOpen(items)} >
             <View style={styles.post}>
                 <ImageBackground style={styles.image} source={{uri: items.img}}>
                     <View style={styles.textWrap}>
