@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   Image,
   ScrollView,
   Alert, Linking
@@ -13,6 +12,10 @@ import Constants from "expo-constants";
 import { Notifications } from "expo";
 import moment from "moment";
 import { DATA } from "../data";
+import {Button} from 'react-native-elements';
+import { THEME } from "../theme";
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import {AppHeaderBack, IconList, IconPrice, AppHeaderIcon} from '../components/AppHeaderIcon';
 
 export const PostScreen = ({ navigation }) => {
   const post = navigation.getParam("post");
@@ -112,124 +115,203 @@ export const PostScreen = ({ navigation }) => {
       )
       .catch((err) => console.error(err));
   };
-  
+  const url = 'https://old.mospolytech.ru/index.php?id=6453#2.2.7';
+  const openURL = () => {
+    Linking.openURL(url);
+  }
 
   return (
-    <ScrollView style={styles.center}>
+    <ScrollView style={styles.center} showsVerticalScrollIndicator={false}>
+    {/* <View>
+      <Text style={styles.tac}>Информация об образовательной программе</Text>
+    </View> */}
+    <View style={styles.mainWrapper}>
       <Image style={styles.img} source={{ uri: postData.img }} />
-
-      <View>
-        <Text style={styles.tac}>Информация об образовательной программе</Text>
-      </View>
-      
-      <View style={styles.textWrap}>
-        <Text style={styles.subTitle}>КВАЛИФИКАЦИЯ</Text>
-        <Text style={styles.title}>{postData.skill}</Text>
-      </View>
-
-      <View style={styles.textWrap}>
-        <Text style={styles.subTitle}>НАИМЕНОВАНИЕ НАПРАВЛЕНИЯ</Text>
-        <Text style={styles.title}>{postData.name}</Text>
-      </View>
-
-      <View style={styles.textWrapper}>
+      <Text style={styles.postName}>{post.name}</Text>
+    </View>
+    <View style={styles.line}/>
+    <View style={styles.mainWrapper}>
+    <Button
+      title="Включит"
+      type="solid"
+      onPress={notificationHandler}
+    />
+    <Button
+      title="перейти"
+      type="outline"
+      color="green"
+      backgroundColor="green"
+      onPress={openURL}
+    />
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-barcode"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>КОД НАПРАВЛЕНИЯ ПОДГОТОВКИ</Text>
         <Text style={styles.title}>{postData.code}</Text>
       </View>
-
-      <View style={styles.textWrapper}>
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-pricetags"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>СТОИМОСТЬ</Text>
         <Text style={styles.title}>{postData.cost}</Text>
       </View>
-
-      <View style={styles.textWrapper}>
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-calendar"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>СРОК ОБУЧЕНИЯ</Text>
         <Text style={styles.title}>{postData.period}</Text>
       </View>
-
-      <View style={styles.textWrapper}>
-        <Text style={styles.subTitle}>
-          ВСТУПИТЕЛЬНЫЕ ИСПЫТАНИЯ И МИНИМАЛЬНЫЕ БАЛЛЫ
-        </Text>
-        <View style={styles.date}>
-          <Text style={styles.tit}>{postData.lessons[0].name}</Text>
-          <Text style={styles.tite}>{new Date(postData.lessons[0].date).toLocaleString()}</Text>
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-key"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
+        <Text style={styles.subTitle}>ВСТУПИТЕЛЬНЫЕ ИСПЫТАНИЯ И МИНИМАЛЬНЫЕ БАЛЛЫ</Text>
+        {postData.lessons.map((prop, key) => {
+       return (
+         <Text style={styles.tit} key={key}>{prop.name}</Text>
+       );
+    })}
         </View>
-        <View style={styles.date}>
-          <Text style={styles.tit}>{postData.lessons[1].name}</Text>
-          <Text style={styles.tite}>{new Date(postData.lessons[1].date).toLocaleString()}</Text>
-        </View>
-        <View style={styles.date}>
-        <Text style={styles.tit}>{postData.lessons[2].name}</Text>
-          <Text style={styles.tite}>{new Date(postData.lessons[2].date).toLocaleString()}</Text>
-        </View>
-      </View>
+    </View>
 
-      <View style={styles.btn}>
-      <Button
-        title="Включить уведомление"
-        color="green"
-        onPress={notificationHandler}
-      />
-      </View>
-
-      <View style={styles.textWrapper}>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-cash"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>БЮДЖЕТНЫХ МЕСТ</Text>
         <Text style={styles.title}>{postData.budget}</Text>
       </View>
-
-      <View style={styles.textWrapper}>
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-checkmark-circle"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>ПЛАТНЫХ МЕСТ</Text>
         <Text style={styles.title}>{postData.paid}</Text>
       </View>
-
-      <View style={styles.textWrapper}>
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-home"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>ОСНОВНОЙ КОРПУС</Text>
         <Text style={styles.title}>{postData.main}</Text>
       </View>
-
-      <View style={styles.textWrapper}>
-        <Text style={styles.subTitle}>РУКОВОДИТЕЛЬ</Text>
-        <Text style={styles.title}>
-          {postData.teacher}
-        </Text>
-      </View>
-
-      <View style={styles.textWrapper}>
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-finger-print"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
         <Text style={styles.subTitle}>ПРИЕМ ИНОСТРАННЫХ ГРАЖДАН</Text>
         <Text style={styles.title}>
-          {postData.foreign ? "Возможен" : "Не возможен"}
-        </Text>
+        {postData.foreign ? "Возможен" : "Не возможен"}
+      </Text>
       </View>
-
-      <View style={styles.btn}>
-      <Button
-        title="Включить уведомление"
-        color="green"
-        onPress={notificationHandler}
-      />
+    </View>
+    <View style={styles.listWrapper}>
+      <HeaderButtons HeaderButtonComponent={IconList}>
+        <Item 
+          iconName="ios-person"  
+        />
+      </HeaderButtons>
+      <View style={styles.list}>
+        <Text style={styles.subTitle}>РУКОВОДИТЕЛЬ</Text>
+        <Text style={styles.title}>{postData.teacher}</Text>
       </View>
-      
-    </ScrollView>
+    </View>
+    <View style={styles.infoWrapper}>
+        <Text style={styles.infoTitle}>ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</Text>
+        <Text style={styles.infoSubtitle}>{postData.information}</Text>
+        <Button type="outline" title="см. пункт 2.2.7" onPress={openURL}/>
+    </View>
+    
+  </ScrollView>
   );
 };
 
 PostScreen.navigationOptions = ({ navigation }) => {
   const post = navigation.getParam("post");
   return {
-    headerTitle: post.name,
-    
+    headerTitle: "подробности",
     headerStyle: {
-      backgroundColor: "green",
-      
+      backgroundColor: THEME.MAIN_COLOR,      
     },
+    headerLeft: () => <HeaderButtons HeaderButtonComponent={AppHeaderIcon}>
+    <Item 
+     title="go back"
+     iconName="ios-arrow-dropleft" 
+     onPress={()=>navigation.popToTop()}
+     />
+     </HeaderButtons>
   };
 };
 
 const styles = StyleSheet.create({
+  mainWrapper: {
+    display: 'flex',
+    flexDirection:'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 20
+
+  },
+  postName: {
+    width:100
+  },
+  line: {
+    borderBottomColor: 'gray', 
+    borderBottomWidth: 1,
+    margin: 10
+  },
+  btnTop: {
+    backgroundColor: 'red'
+  },
   img: {
-    width: "100%",
-    height: 200,
+    width: 100,
+    height: 100,
+    borderRadius: 200
+  },
+  listWrapper:{
+    display: 'flex',
+    flexDirection:'row',
+    paddingHorizontal: 20
+  },
+  list:{
+    display: 'flex',
+    flexDirection:'column',
+    alignItems: 'stretch',
+    padding: 20
   },
   tac: {
     textAlign: "center",
@@ -240,7 +322,6 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   subTitle: {
-    textAlign: "center",
     fontWeight: "bold",
   },
   textWrap: {
@@ -261,25 +342,24 @@ const styles = StyleSheet.create({
     // elevation: 5,
   },
   title: {
-    padding: 10,
-    textAlign: "center",
     borderBottomWidth: 1,
   },
   tit: {
-    paddingTop: 15,
-    textAlign: "center",
-  },
-  tite: {
-    paddingTop: 5,
-    textAlign: "center",
-    color: 'green'
   },
   btn: {
     padding: 1,
     marginBottom: 30
   },
-  date: {
-    padding: 1,
-    marginBottom: 30
+  infoWrapper:{
+    display: 'flex',
+    textAlign: "center",
+    alignItems:'center',
+    margin:10
   },
-});
+  infoTitle: {
+    fontWeight: 'bold'
+  },
+  infoSubtitle: {
+    padding:5
+  }
+})

@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text, ImageBackground, TouchableOpacity} from 'react-native';
+import { THEME } from '../theme';
 
 export const Post = ({items, onOpen}) => {
     return (
@@ -22,19 +23,20 @@ const styles = StyleSheet.create({
     post: {
         marginBottom: 20,
         overflow: 'hidden',
+        borderRadius: 15, 
+        borderWidth: 0.1
     },
     image: {
         width: '100%',
         height: 150,
     },
     textWrap: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'white',
         paddingVertical: 5,
         alignItems: 'center',
         width: '100%',
     },
     title: {
-        color: '#fff',
-        textAlign: 'center'
+        color: THEME.MAIN_COLOR
     }
 });

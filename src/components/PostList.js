@@ -6,6 +6,7 @@ export const PostList = ({data, onOpen}) => {
     return (
         <View style={styles.wrapper}>
             <FlatList 
+            showsVerticalScrollIndicator={false}
              data={data} 
              keyExtractor={item => item.id}
              renderItem={({item}) =>  <Post items={item} onOpen={onOpen}/>}

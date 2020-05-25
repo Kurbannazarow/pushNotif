@@ -11,7 +11,7 @@ export const AppHeaderIcon = props => {
          {...props}
          iconSize={24} 
          IconComponent={Ionicons}
-         color={Platform.OS==='android'?'#fff':THEME.MAIN_COLOR}/>
+         color={'#fff'}/>
     );
 }
 
@@ -22,5 +22,32 @@ export const AppHeaderIcon2 = props => {
          iconSize={24} 
          IconComponent={MaterialCommunityIcons}
          color={Platform.OS==='android'?'#fff':THEME.MAIN_COLOR}/>
+    );
+}
+export const AppComponent = props => {
+    return (
+        <HeaderButton 
+         {...props}
+         iconSize={24} 
+         IconComponent={Ionicons}
+         color={Platform.OS==='ios'?'#fff':THEME.MAIN_COLOR}/>
+    );
+}
+export const IconList = props => {
+    return (
+        <HeaderButton 
+         {...props}
+         iconSize={30} 
+         IconComponent={Ionicons}
+         color={'gray'}/>
+    );
+}
+export const IconPrice = props => {
+    return (
+        <HeaderButton 
+         {...props}
+         iconSize={24} 
+         IconComponent={Ionicons}
+         color={THEME.MAIN_COLOR}/>
     );
 }
