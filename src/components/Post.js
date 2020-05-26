@@ -4,7 +4,7 @@ import { THEME } from '../theme';
 
 export const Post = ({items, onOpen}) => {
     return (
-        <TouchableOpacity onLongPress={()=>alert('Не надо удерживать картинку студент!')} 
+        <TouchableOpacity onLongPress={()=>alert('Не надо удерживать картинку, студент!')} 
         onPress={()=>onOpen(items)} >
             <View style={styles.post}>
                 <ImageBackground style={styles.image} source={{uri: items.img}}>

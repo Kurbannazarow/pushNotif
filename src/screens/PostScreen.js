@@ -26,7 +26,7 @@ export const PostScreen = ({ navigation }) => {
 
   const notificationHandler = () => {
     Alert.alert(
-      "Подключение уведомление",
+      "Подключение уведомления",
       "Вы хотите подключить оповещение об экзамене?",
       [
         {
@@ -38,13 +38,29 @@ export const PostScreen = ({ navigation }) => {
           style: "destructive",
           onPress: () => {
             registerForPushNotificationsAsync();
-            alert("Уведомление настроено");
+            Alert.alert(
+              "Уведомление подключено!",
+              "",
+              [
+                {
+                  text: '',
+                  style: "cancel",
+                },
+                {
+                  text: "спасибо",
+                  style: "destructive"
+                },
+              ],
+              { cancelable: false }
+            );
           },
         },
       ],
       { cancelable: false }
     );
   };
+
+  
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -88,10 +104,9 @@ export const PostScreen = ({ navigation }) => {
     }
   };
   const scheduleNotification = async (name, date, hourBefore) => {
-    //Before 3 hours
     const localNotification = {
-      title: "In " + hourBefore +  " hours - " + name,
-      body: date,
+      title: "Через " + hourBefore +  " часа у вас экзамен, по " + name,
+      body: "Не забудьте пожалуйста взять с собой паспорт, листочек, ручка, вода и на всякий случай захватите и калькулятор!",
       data: { type: "delayed" },
       sound: true,
     };
@@ -115,7 +130,7 @@ export const PostScreen = ({ navigation }) => {
       )
       .catch((err) => console.error(err));
   };
-  const url = 'https://old.mospolytech.ru/index.php?id=6453#2.2.7';
+  const url = 'https://new.mospolytech.ru/postupayushchim/news/admissions-during-the-holidays-are-ready-to-answer-your-questions-by-email-or-using-the-form-on-the-/';
   const openURL = () => {
     Linking.openURL(url);
   }
@@ -132,12 +147,15 @@ export const PostScreen = ({ navigation }) => {
     <View style={styles.line}/>
     <View style={styles.mainWrapper}>
     <Button
-      title="Включит"
+     titleStyle={{color: 'white'}}
+      title="Вкл. уведомление"
       type="solid"
+      color="green"
       onPress={notificationHandler}
     />
     <Button
-      title="перейти"
+      titleStyle={{color: THEME.MAIN_COLOR}}
+      title="П. коммиссия"
       type="outline"
       color="green"
       backgroundColor="green"
@@ -184,14 +202,19 @@ export const PostScreen = ({ navigation }) => {
         />
       </HeaderButtons>
       <View style={styles.list}>
-        <Text style={styles.subTitle}>ВСТУПИТЕЛЬНЫЕ ИСПЫТАНИЯ И МИНИМАЛЬНЫЕ БАЛЛЫ</Text>
+        <Text style={styles.t}>ВСТУПИТЕЛЬНЫЕ ИСПЫТАНИЯ И МИНИМАЛЬНЫЕ БАЛЛЫ</Text>
         {postData.lessons.map((prop, key) => {
        return (
-         <Text style={styles.tit} key={key}>{prop.name}</Text>
+         <View key={key}>
+          <Text style={styles.tit} >{prop.name}</Text>
+          <Text style={styles.green}>{new Date(postData.lessons[key].date).toLocaleDateString() + " " + new Date(postData.lessons[key].date).toLocaleTimeString('ru-RU')}</Text>
+         </View>
        );
     })}
         </View>
     </View>
+
+    
 
     <View style={styles.listWrapper}>
       <HeaderButtons HeaderButtonComponent={IconList}>
@@ -250,11 +273,6 @@ export const PostScreen = ({ navigation }) => {
         <Text style={styles.title}>{postData.teacher}</Text>
       </View>
     </View>
-    <View style={styles.infoWrapper}>
-        <Text style={styles.infoTitle}>ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</Text>
-        <Text style={styles.infoSubtitle}>{postData.information}</Text>
-        <Button type="outline" title="см. пункт 2.2.7" onPress={openURL}/>
-    </View>
     
   </ScrollView>
   );
@@ -288,6 +306,14 @@ const styles = StyleSheet.create({
   },
   postName: {
     width:100
+  },
+  green: {
+    color: THEME.MAIN_COLOR,   
+    marginBottom: 10,
+  },
+  t: {
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   line: {
     borderBottomColor: 'gray', 
@@ -343,6 +369,7 @@ const styles = StyleSheet.create({
   },
   title: {
     borderBottomWidth: 1,
+    textAlign: 'center',
   },
   tit: {
   },

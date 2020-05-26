@@ -3,19 +3,16 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { AppHeaderIcon2} from '../components/AppHeaderIcon';
 import { THEME } from "../theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 
 export const AboutScreen = ({navigation}) => {
     return (
         <View style={styles.center}>
-            <Text>Это лучшее приложение для аббитуриентов </Text>
+            <Text>Это лучшее приложение для абитуриентов </Text>
             <Text>Версия приложения <Text style={styles.version}>1.0.0</Text></Text>
             {/* <Button title="go back to Main screen" onPress={()=>navigation.goBack()}/> */}
         </View>
     );
 }
-
 
 
 AboutScreen.navigationOptions = ({navigation}) => ({

@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
-import { View, Text, StyleSheet, Linking, Button } from 'react-native';
+import { View, Text, StyleSheet, Linking } from 'react-native';
+import { Button } from 'react-native-elements';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { AppHeaderIcon2} from '../components/AppHeaderIcon';
 import { THEME } from "../theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 
 export const LinkScreen = ({navigation}) => {
@@ -15,7 +15,7 @@ export const LinkScreen = ({navigation}) => {
         const handlePress = useCallback(async () => {
         await Linking.openURL(url);
         }, []);
-        return <Button title={children} onPress={handlePress} color={THEME.MAIN_COLOR}/>;
+        return <Button titleStyle={{color: THEME.MAIN_COLOR}} type="outline" title={children} onPress={handlePress} color={THEME.MAIN_COLOR}/>;
     };
 
 
